@@ -16,9 +16,7 @@ connectDB();
 
 
 
-connectRabbitMQ().then(() => {
-    startConsumer();
-});
+connectRabbitMQ();
 
 
 
