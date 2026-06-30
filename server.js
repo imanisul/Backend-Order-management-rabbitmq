@@ -9,6 +9,10 @@ const {
     connectRabbitMQ
 } = require('./src/config/rabbitmq.js');
 
+const { startInvoiceConsumer } = require("./src/services/invoiceConsumer.js");
+const { startInventoryConsumer } = require("./src/services/inventoryConsumer.js");
+const { startEmailConsumer } = require("./src/services/emailConsumer.js");
+
 const PORT = process.env.PORT;
 
 
@@ -16,7 +20,14 @@ connectDB();
 
 
 
-connectRabbitMQ();
+connectRabbitMQ().then(() => {
+    startInventoryConsumer();
+
+    startEmailConsumer();
+
+    startInvoiceConsumer();
+
+});
 
 
 

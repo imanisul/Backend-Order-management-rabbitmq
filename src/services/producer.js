@@ -4,12 +4,14 @@ const {getChannel} = require("../config/rabbitmq.js");
 const sendOrderMessage = async (order) => {
     const channel = getChannel();
 
-    channel.sendToQueue(
-        "orderQueue",
+    channel.publish(
+        'orderExchange',
+        '',
         Buffer.from(JSON.stringify(order))
+
     );
 
-    console.log("Message send to Queue");
+    console.log("Order Published");
     
 };
 
