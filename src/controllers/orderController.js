@@ -9,8 +9,9 @@ const {sendOrderMessage} = require('../services/producer.js');
 const createOrder = async (req, res) => {
     try{
         const order = await Order.create(req.body);
-        await sendOrderMessage(order);
-        res.status(201).json(order);
+        const savedOrder = await order.save();
+        await sendOrderMessage(savedOrder);
+        res.status(201).json(savedOrder);
     }
     catch(error){
         res.status(500).json({message: error.message});

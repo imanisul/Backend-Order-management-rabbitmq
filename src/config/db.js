@@ -1,14 +1,19 @@
 const mongoose = require("mongoose");
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI);
-
-        console.log("MongoDB connected successfully");
-    }
-    catch(error){
-        console.log(error.message);
-        process.exit(1);
+const connectDB = async (retries = 5) => {
+    while (retries) {
+        try {
+            await mongoose.connect(process.env.MONGODB_URI);
+            console.log("MongoDB connected successfully");
+            return;
+        } catch(error) {
+            console.log(`MongoDB connection error: ${error.message}. Retries left: ${retries - 1}`);
+            retries -= 1;
+            if (retries === 0) {
+                process.exit(1);
+            }
+            await new Promise(res => setTimeout(res, 5000));
+        }
     }
 };
 
